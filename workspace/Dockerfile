@@ -1881,5 +1881,8 @@ RUN apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     rm -f /var/log/lastlog /var/log/faillog
 
+# Intall composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 # Set default work directory
 WORKDIR /var/www
