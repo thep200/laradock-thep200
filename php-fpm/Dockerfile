@@ -933,7 +933,7 @@ RUN if [ ${INSTALL_YAML} = true ]; then \
 # RDKAFKA:
 ###########################################################################
 
-ARG INSTALL_RDKAFKA=false
+ARG INSTALL_RDKAFKA=true
 
 RUN if [ ${INSTALL_RDKAFKA} = true ]; then \
     apt-get install -yqq librdkafka-dev && \

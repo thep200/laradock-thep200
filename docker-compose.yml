@@ -598,7 +598,7 @@ services:
       extra_hosts:
         - "host.docker.internal:host-gateway"
 
-### KAFKA ##############################################
+### Kafka ##############################################
     kafka:
       image: bitnami/kafka:3.6.1-debian-11-r0
       restart: unless-stopped
@@ -629,7 +629,7 @@ services:
       volumes:
         - "Kafka:/bitnami/kafka"
 
-### KAFKA-UI ##############################################
+### Kafka-ui ##############################################
     kafka-ui:
       image: provectuslabs/kafka-ui:latest
       restart: unless-stopped
@@ -639,12 +639,28 @@ services:
       environment:
         - DYNAMIC_CONFIG_ENABLED=true
         - DYNAMIC_CONFIG_ENABLED=true
-        - KAFKA_CLUSTERS_0_NAME=Local-Cluster
-        - KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME=connect
+        - KAFKA_CLUSTERS_0_NAME=Local
         - KAFKA_CLUSTERS_0_AUDIT_TOPICAUDITENABLED=true
         - KAFKA_CLUSTERS_0_AUDIT_CONSOLEAUDITENABLED=true
         - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
-        - KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS=http://connect:8083
+        - KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME=debezium
+        - KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS=http://debezium:8083
+      networks:
+        - backend
+
+### Debezium ##############################################
+    debezium:
+      image: quay.io/debezium/connect:2.6
+      container_name: debezium
+      ports:
+      - 8083:8083
+      links:
+      - kafka
+      environment:
+      - GROUP_ID=1
+      - BOOTSTRAP_SERVERS=kafka:9092
+      - CONFIG_STORAGE_TOPIC=config_storage_topic_debezium
+      - OFFSET_STORAGE_TOPIC=config_storage_topic_debezium
       networks:
         - backend
 
