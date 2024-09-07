@@ -3,7 +3,7 @@ networks:
     driver: ${NETWORKS_DRIVER}
   backend:
     driver: ${NETWORKS_DRIVER}
-    
+
 volumes:
   mysql:
     driver: ${VOLUMES_DRIVER}
@@ -364,7 +364,7 @@ services:
 
 ## Kafka ##############################################
     kafka00:
-      image: bitnami/kafka:3.6.1-debian-11-r0
+      image: bitnami/kafka:${BITNAMI_KAFKA_VERSION}-debian-11-r0
       restart: unless-stopped
       container_name: kafka00
       ports:
@@ -394,7 +394,7 @@ services:
         - "Kafka00:/kafka"
 
     kafka01:
-      image: bitnami/kafka:3.6.1-debian-11-r0
+      image: bitnami/kafka:${BITNAMI_KAFKA_VERSION}-debian-11-r0
       restart: unless-stopped
       container_name: kafka01
       ports:
@@ -424,7 +424,7 @@ services:
         - "Kafka01:/kafka"
 
     kafka02:
-      image: bitnami/kafka:3.6.1-debian-11-r0
+      image: bitnami/kafka:${BITNAMI_KAFKA_VERSION}-debian-11-r0
       restart: unless-stopped
       container_name: kafka02
       ports:
@@ -455,7 +455,7 @@ services:
 
 ### Kafka-ui ##############################################
     kafka-ui:
-      image: provectuslabs/kafka-ui:latest
+      image: provectuslabs/kafka-ui:${KAFKA_UI_VERSION}
       restart: unless-stopped
       container_name: kafka-ui
       ports:
@@ -475,7 +475,7 @@ services:
 
 ### Debezium ##############################################
     connect:
-      image: quay.io/debezium/connect:2.6
+      image: quay.io/debezium/connect:${DEBEZIUM_VERSION}
       container_name: kafka-connect
       restart: unless-stopped
       ports:
@@ -487,8 +487,8 @@ services:
       environment:
         - BOOTSTRAP_SERVERS=kafka00:9092,kafka01:9092,kafka02:9092
         - GROUP_ID=1
-        - CONFIG_STORAGE_TOPIC=local_configs
-        - OFFSET_STORAGE_TOPIC=local_offsets
+        - CONFIG_STORAGE_TOPIC=connect_local_configs
+        - OFFSET_STORAGE_TOPIC=connect_local_offsets
       networks:
         - backend
 
