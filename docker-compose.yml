@@ -64,6 +64,7 @@ services:
 ### Workspace Utilities ##################################
     workspace:
       restart: always
+      container_name: workspace
       build:
         context: ./workspace
         args:
@@ -225,6 +226,7 @@ services:
 ### PHP-FPM ##############################################
     php-fpm:
       restart: always
+      container_name: phpfpm
       build:
         context: ./php-fpm
         args:
@@ -335,9 +337,8 @@ services:
         - DOCKER_CERT_PATH=/certs/client
         - FAKETIME=${PHP_FPM_FAKETIME}
         - TZ=${WORKSPACE_TIMEZONE}
-
-      depends_on:
-        - workspace
+      # depends_on:
+        # - workspace
       networks:
         - backend
       links:
@@ -345,6 +346,7 @@ services:
 
 ### PHP-FPM-74 ##############################################
     php-fpm-74:
+      container_name: phpfpm74
       build:
         context: ./php-fpm
         args:
@@ -450,8 +452,8 @@ services:
         - DOCKER_TLS_CERTDIR=/certs
         - DOCKER_CERT_PATH=/certs/client
         - FAKETIME=${PHP_FPM_FAKETIME}
-      depends_on:
-        - workspace
+      # depends_on:
+        # - workspace
       networks:
         - backend
       links:
@@ -576,6 +578,7 @@ services:
 ### NGINX Server #########################################
     nginx:
       restart: always
+      container_name: nginx
       build:
         context: ./nginx
         args:
@@ -830,6 +833,7 @@ services:
 ### MySQL ################################################
     mysql:
       restart: always
+      container_name: mysql
       build:
         context: ./mysql
         args:
@@ -1065,6 +1069,7 @@ services:
   ### Redis ################################################
     redis:
       restart: always
+      container_name: redis
       build: ./redis
       volumes:
         - ${DATA_PATH_HOST}/redis:/data
@@ -1917,6 +1922,7 @@ services:
 ### Docker-in-Docker ################################################
     docker-in-docker:
       restart: always
+      container_name: dockerInDocker
       image: docker:20.10-dind
       environment:
         DOCKER_TLS_SAN: DNS:docker-in-docker
