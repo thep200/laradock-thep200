@@ -120,6 +120,7 @@ services:
           - INSTALL_CACHETOOL=${PHP_FPM_INSTALL_CACHETOOL}
           - INSTALL_YAML=${PHP_FPM_INSTALL_YAML}
           - INSTALL_RDKAFKA=${PHP_FPM_INSTALL_RDKAFKA}
+          # - INSTALL_NGROK=${PHP_FPM_INSTALL_NGROK}
           - INSTALL_GETTEXT=${PHP_FPM_INSTALL_GETTEXT}
           - INSTALL_ADDITIONAL_LOCALES=${PHP_FPM_INSTALL_ADDITIONAL_LOCALES}
           - INSTALL_MYSQL_CLIENT=${PHP_FPM_INSTALL_MYSQL_CLIENT}
@@ -489,6 +490,22 @@ services:
         - GROUP_ID=1
         - CONFIG_STORAGE_TOPIC=connect_local_configs
         - OFFSET_STORAGE_TOPIC=connect_local_offsets
+      networks:
+        - backend
+
+### Ngrok ##############################################
+    ngrok:
+      image: ngrok/ngrok:latest
+      container_name: ngrok
+      environment:
+        - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+      command:
+        - 'http'
+        - 'https://nginx:443'
+      ports:
+        - '4040:4040'
+      expose:
+        - '4040'
       networks:
         - backend
 
