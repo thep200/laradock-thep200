@@ -494,20 +494,20 @@ services:
         - backend
 
 ### Ngrok ##############################################
-    ngrok:
-      image: ngrok/ngrok:latest
-      container_name: ngrok
-      environment:
-        - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
-      command:
-        - 'http'
-        - 'https://nginx:443'
-      ports:
-        - '4040:4040'
-      expose:
-        - '4040'
-      networks:
-        - backend
+    # ngrok:
+    #   image: ngrok/ngrok:latest
+    #   container_name: ngrok
+    #   environment:
+    #     - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+    #   command:
+    #     - 'http'
+    #     - 'https://nginx:443'
+    #   ports:
+    #     - '4040:4040'
+    #   expose:
+    #     - '4040'
+    #   networks:
+    #     - backend
 
 # ### Workspace Utilities ##################################
 #     workspace:
