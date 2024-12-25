@@ -383,7 +383,7 @@ services:
         # Listeners
         - ALLOW_PLAINTEXT_LISTENER=yes
         - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
-        - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka00:9092,EXTERNAL://localhost:10000
+        - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka00:9092,EXTERNAL://kafka00:10000
         - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
         - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
         - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
@@ -413,7 +413,7 @@ services:
         # Listeners
         - ALLOW_PLAINTEXT_LISTENER=yes
         - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
-        - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka01:9092,EXTERNAL://localhost:10001
+        - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka01:9092,EXTERNAL://kafka01:10001
         - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
         - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
         - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
@@ -443,7 +443,7 @@ services:
         # Listeners
         - ALLOW_PLAINTEXT_LISTENER=yes
         - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
-        - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka02:9092,EXTERNAL://localhost:10002
+        - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka02:9092,EXTERNAL://kafka02:10002
         - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
         - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
         - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
@@ -475,6 +475,74 @@ services:
         #- KAFKA_CLUSTERS_0_METRICS_PORT=9999
       networks:
         - backend
+
+### Conduktor ##############################################
+    # conduktor:
+    #   image: conduktor/conduktor-console
+    #   container_name: conduktor
+    #   depends_on:
+    #     - postgres
+    #   ports:
+    #     - 8080:8080
+    #   environment:
+    #     CDK_DATABASE_URL: "jdbc:postgresql://host.docker.internal:5432/conduktor?user=default&password=secret"
+    #     CDK_ADMIN_EMAIL: "admin@gmail.com"
+    #     CDK_ADMIN_PASSWORD: "Adminroot12#"
+    #     CDK_MONITORING_CORTEX-URL: http://conduktor-monitoring:9009/
+    #     CDK_MONITORING_ALERT-MANAGER-URL: http://conduktor-monitoring:9010/
+    #     CDK_MONITORING_CALLBACK-URL: http://conduktor-console:8085/monitoring/api/
+    #     CDK_MONITORING_NOTIFICATIONS-CALLBACK-URL: http://localhost:8080
+    #   networks:
+    #     - backend
+
+### Conduktor monitoring ##############################################
+    # conduktor-monitoring:
+    #   image: conduktor/conduktor-console-cortex:1.30.0
+    #   container_name: conduktor-monitoring
+    #   depends_on:
+    #     - conduktor
+    #   environment:
+    #     CDK_CONSOLE-URL: "http://conduktor-console:8080"
+
+# ### PostgreSQL ###########################################
+    # postgres:
+    #   container_name: postgres
+    #   restart: always
+    #   build:
+    #     context: ./postgres
+    #     args:
+    #       - POSTGRES_VERSION=${POSTGRES_VERSION}
+    #   volumes:
+    #     - ${DATA_PATH_HOST}/postgres:/var/lib/postgresql/data
+    #     - ${POSTGRES_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
+    #   ports:
+    #     - "${POSTGRES_PORT}:5432"
+    #   environment:
+    #     - POSTGRES_DB=${POSTGRES_DB}
+    #     - POSTGRES_USER=${POSTGRES_USER}
+    #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    #     - GITLAB_POSTGRES_INIT=${GITLAB_POSTGRES_INIT}
+    #     - GITLAB_POSTGRES_USER=${GITLAB_POSTGRES_USER}
+    #     - GITLAB_POSTGRES_PASSWORD=${GITLAB_POSTGRES_PASSWORD}
+    #     - GITLAB_POSTGRES_DB=${GITLAB_POSTGRES_DB}
+    #     - KEYCLOAK_POSTGRES_INIT=${KEYCLOAK_POSTGRES_INIT}
+    #     - KEYCLOAK_POSTGRES_USER=${KEYCLOAK_POSTGRES_USER}
+    #     - KEYCLOAK_POSTGRES_PASSWORD=${KEYCLOAK_POSTGRES_PASSWORD}
+    #     - KEYCLOAK_POSTGRES_DB=${KEYCLOAK_POSTGRES_DB}
+    #     - JUPYTERHUB_POSTGRES_INIT=${JUPYTERHUB_POSTGRES_INIT}
+    #     - JUPYTERHUB_POSTGRES_USER=${JUPYTERHUB_POSTGRES_USER}
+    #     - JUPYTERHUB_POSTGRES_PASSWORD=${JUPYTERHUB_POSTGRES_PASSWORD}
+    #     - JUPYTERHUB_POSTGRES_DB=${JUPYTERHUB_POSTGRES_DB}
+    #     - SONARQUBE_POSTGRES_INIT=${SONARQUBE_POSTGRES_INIT}
+    #     - SONARQUBE_POSTGRES_DB=${SONARQUBE_POSTGRES_DB}
+    #     - SONARQUBE_POSTGRES_USER=${SONARQUBE_POSTGRES_USER}
+    #     - SONARQUBE_POSTGRES_PASSWORD=${SONARQUBE_POSTGRES_PASSWORD}
+    #     - POSTGRES_CONFLUENCE_INIT=${CONFLUENCE_POSTGRES_INIT}
+    #     - POSTGRES_CONFLUENCE_DB=${CONFLUENCE_POSTGRES_DB}
+    #     - POSTGRES_CONFLUENCE_USER=${CONFLUENCE_POSTGRES_USER}
+    #     - POSTGRES_CONFLUENCE_PASSWORD=${CONFLUENCE_POSTGRES_PASSWORD}
+    #   networks:
+    #     - backend
 
 ### Debezium ##############################################
     connect:
@@ -945,44 +1013,6 @@ services:
 #       networks:
 #         - backend
 
-# ### PostgreSQL ###########################################
-#     postgres:
-#       restart: always
-#       build:
-#         context: ./postgres
-#         args:
-#           - POSTGRES_VERSION=${POSTGRES_VERSION}
-#       volumes:
-#         - ${DATA_PATH_HOST}/postgres:/var/lib/postgresql/data
-#         - ${POSTGRES_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
-#       ports:
-#         - "${POSTGRES_PORT}:5432"
-#       environment:
-#         - POSTGRES_DB=${POSTGRES_DB}
-#         - POSTGRES_USER=${POSTGRES_USER}
-#         - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-#         - GITLAB_POSTGRES_INIT=${GITLAB_POSTGRES_INIT}
-#         - GITLAB_POSTGRES_USER=${GITLAB_POSTGRES_USER}
-#         - GITLAB_POSTGRES_PASSWORD=${GITLAB_POSTGRES_PASSWORD}
-#         - GITLAB_POSTGRES_DB=${GITLAB_POSTGRES_DB}
-#         - KEYCLOAK_POSTGRES_INIT=${KEYCLOAK_POSTGRES_INIT}
-#         - KEYCLOAK_POSTGRES_USER=${KEYCLOAK_POSTGRES_USER}
-#         - KEYCLOAK_POSTGRES_PASSWORD=${KEYCLOAK_POSTGRES_PASSWORD}
-#         - KEYCLOAK_POSTGRES_DB=${KEYCLOAK_POSTGRES_DB}
-#         - JUPYTERHUB_POSTGRES_INIT=${JUPYTERHUB_POSTGRES_INIT}
-#         - JUPYTERHUB_POSTGRES_USER=${JUPYTERHUB_POSTGRES_USER}
-#         - JUPYTERHUB_POSTGRES_PASSWORD=${JUPYTERHUB_POSTGRES_PASSWORD}
-#         - JUPYTERHUB_POSTGRES_DB=${JUPYTERHUB_POSTGRES_DB}
-#         - SONARQUBE_POSTGRES_INIT=${SONARQUBE_POSTGRES_INIT}
-#         - SONARQUBE_POSTGRES_DB=${SONARQUBE_POSTGRES_DB}
-#         - SONARQUBE_POSTGRES_USER=${SONARQUBE_POSTGRES_USER}
-#         - SONARQUBE_POSTGRES_PASSWORD=${SONARQUBE_POSTGRES_PASSWORD}
-#         - POSTGRES_CONFLUENCE_INIT=${CONFLUENCE_POSTGRES_INIT}
-#         - POSTGRES_CONFLUENCE_DB=${CONFLUENCE_POSTGRES_DB}
-#         - POSTGRES_CONFLUENCE_USER=${CONFLUENCE_POSTGRES_USER}
-#         - POSTGRES_CONFLUENCE_PASSWORD=${CONFLUENCE_POSTGRES_PASSWORD}
-#       networks:
-#         - backend
 # ### pgbackups PostgreSQL ###########################################
 #     pgbackups:
 #       image: prodrigestivill/postgres-backup-local
