@@ -942,6 +942,30 @@ RUN if [ ${INSTALL_RDKAFKA} = true ]; then \
 ;fi
 
 ###########################################################################
+# GRPC:
+###########################################################################
+
+ARG INSTALL_GRPC=true
+
+RUN if [ ${INSTALL_GRPC} = true ]; then \
+    apt-get install -yqq zlib1g-dev build-essential libssl-dev pkg-config && \
+    pecl install grpc && \
+    docker-php-ext-enable grpc \
+;fi
+
+###########################################################################
+# PROTOBUF:
+###########################################################################
+
+ARG INSTALL_PROTOBUF=true
+
+RUN if [ ${INSTALL_PROTOBUF} = true ]; then \
+    apt-get install -yqq libprotobuf-dev protobuf-compiler && \
+    pecl install protobuf && \
+    docker-php-ext-enable protobuf \
+;fi
+
+###########################################################################
 # GETTEXT:
 ###########################################################################
 
