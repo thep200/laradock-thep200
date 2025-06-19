@@ -937,9 +937,13 @@ RUN if [ ${INSTALL_YAML} = true ]; then \
 ARG INSTALL_RDKAFKA=true
 
 RUN if [ ${INSTALL_RDKAFKA} = true ]; then \
-    apt-get install -yqq librdkafka-dev && \
-    pecl install rdkafka && \
-    docker-php-ext-enable rdkafka \
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ] && [ $(php -r "echo PHP_MINOR_VERSION;") -gt 0 ] || [ $(php -r "echo PHP_MAJOR_VERSION;") -gt 8 ]; then \
+        apt-get install -yqq librdkafka-dev && \
+        pecl install rdkafka && \
+        docker-php-ext-enable rdkafka; \
+    else \
+        echo "RDKAFKA extension requires PHP > 8.0"; \
+    fi \
 ;fi
 
 ###########################################################################
@@ -949,9 +953,13 @@ RUN if [ ${INSTALL_RDKAFKA} = true ]; then \
 ARG INSTALL_GRPC=true
 
 RUN if [ ${INSTALL_GRPC} = true ]; then \
-    apt-get install -yqq zlib1g-dev build-essential libssl-dev pkg-config && \
-    pecl install grpc && \
-    docker-php-ext-enable grpc \
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ] && [ $(php -r "echo PHP_MINOR_VERSION;") -gt 0 ] || [ $(php -r "echo PHP_MAJOR_VERSION;") -gt 8 ]; then \
+        apt-get install -yqq zlib1g-dev build-essential libssl-dev pkg-config && \
+        pecl install grpc && \
+        docker-php-ext-enable grpc; \
+    else \
+        echo "GRPC extension requires PHP > 8.0"; \
+    fi \
 ;fi
 
 ###########################################################################
@@ -961,9 +969,13 @@ RUN if [ ${INSTALL_GRPC} = true ]; then \
 ARG INSTALL_PROTOBUF=true
 
 RUN if [ ${INSTALL_PROTOBUF} = true ]; then \
-    apt-get install -yqq libprotobuf-dev protobuf-compiler && \
-    pecl install protobuf && \
-    docker-php-ext-enable protobuf \
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "8" ] && [ $(php -r "echo PHP_MINOR_VERSION;") -gt 0 ] || [ $(php -r "echo PHP_MAJOR_VERSION;") -gt 8 ]; then \
+        apt-get install -yqq libprotobuf-dev protobuf-compiler && \
+        pecl install protobuf && \
+        docker-php-ext-enable protobuf; \
+    else \
+        echo "PROTOBUF extension requires PHP > 8.0"; \
+    fi \
 ;fi
 
 ###########################################################################
