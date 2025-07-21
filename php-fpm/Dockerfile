@@ -373,8 +373,8 @@ RUN if [ ${INSTALL_MONGO} = true ]; then \
           pecl install mongodb-1.16.2; \
         fi; \
       else \
-        pecl install mongodb-1.20.1; \
-        # pecl install mongodb; \
+        # pecl install mongodb-1.20.1; \
+        pecl install mongodb; \
       fi; \
       docker-php-ext-enable mongodb; \
       php -m | grep -oiE '^mongodb$'; \
