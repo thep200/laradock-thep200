@@ -336,6 +336,25 @@ services:
       extra_hosts:
         - "host.docker.internal:host-gateway"
 
+### Nginx UI ###############################################
+  # nginx-ui:
+  #   image: 'uozi/nginx-ui:latest'
+  #   stdin_open: true
+  #   tty: true
+  #   container_name: nginx-ui
+  #   restart: always
+  #   environment:
+  #     - TZ=${NGINX_TIMEZONE}
+  #   volumes:
+  #     - '${NGINX_DATA_PATH_HOST}:/etc/nginx'
+  #     - '${NGINX_UI_DATA_PATH_HOST}:/etc/nginx-ui'
+  #   ports:
+  #     - 3038:38
+  #     - 8443:443
+  #   networks:
+  #     - internal
+  #     - shared
+
 ### Redis ################################################
     # redis:
     #   restart: always
